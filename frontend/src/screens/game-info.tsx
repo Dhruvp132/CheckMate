@@ -22,15 +22,15 @@ export const GameInfo = ({ started, color, gameStatus, turnIndicator }: GameInfo
       <div className="space-y-4">
         {started ? (
           <>
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <span className="text-gray-300">Status:</span>
               <span className="text-white font-medium">{gameStatus}</span>
-            </div>
+            </div> */}
             
             <div className="flex items-center justify-between">
               <span className="text-gray-300">You are playing as:</span>
               <motion.span 
-                className={`font-bold text-lg ${color === "white" ? "text-white" : "text-gray-800"}`}
+                className={`font-bold text-lg ${color === "white" ? "text-white" : "text-white-800"}`}
                 initial={{ scale: 1 }}
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.5, delay: 0.7 }}
@@ -39,10 +39,10 @@ export const GameInfo = ({ started, color, gameStatus, turnIndicator }: GameInfo
               </motion.span>
             </div>
             
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <span className="text-gray-300">Turn:</span>
               <span className="text-white font-medium">{turnIndicator}</span>
-            </div>
+            </div> */}
             
           </>
         ) : (
