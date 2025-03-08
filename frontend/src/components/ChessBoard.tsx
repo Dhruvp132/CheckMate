@@ -1,6 +1,6 @@
 import { Chess, Color, PieceSymbol, Square } from "chess.js";
 import { useState } from "react";
-import { MOVE } from "../screens/Game";
+import { MOVE } from "../screens/Game1";
 
 export const ChessBoard = ({ chess, board, socket, setBoard, color, roomId }: {
     chess: Chess;
