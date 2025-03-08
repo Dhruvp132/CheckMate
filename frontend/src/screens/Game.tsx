@@ -22,8 +22,9 @@ export const MOVE = "move";
 export const GAME_OVER = "game_over";
 export const VIDEO = "video"; 
 
-const WS_URL = "ws://localhost:8080";
-
+// const WS_URL = process.env.REACT_APP_BACKEND_URL || "ws://localhost:8080";
+const WS_URL = "wss://checkmate-backend-5v6nlwmzk-dhruv-patels-projects-7fb495a8.vercel.app";
+console.log("WS_URL", WS_URL);
 
 export const Game = ({
     localAudioTrack,
