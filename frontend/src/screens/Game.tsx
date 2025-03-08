@@ -3,18 +3,20 @@
 // /* eslint-disable @typescript-eslint/no-unused-vars */
 // /* eslint-disable @typescript-eslint/no-unused-vars */
 // /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useEffect, useRef, useState } from "react";
 
-// import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { GameInfo } from "./game-info.tsx";
+import { motion } from "framer-motion";
+import { ThreeJSBackground } from "./three-js-background.tsx";
+import { ChessBoard } from "../components/ChessBoard"
+import { Chess } from 'chess.js'
+
 
 declare global {
     interface Window {
         pcr: RTCPeerConnection | null;
     }
 }
-
-import { ChessBoard } from "../components/ChessBoard"
-import { Chess } from 'chess.js'
 
 // TODO: Move together, there's code repetition here
 export const INIT_GAME = "init_game";
@@ -23,7 +25,7 @@ export const GAME_OVER = "game_over";
 export const VIDEO = "video"; 
 
 // const WS_URL = process.env.REACT_APP_BACKEND_URL || "ws://localhost:8080";
-const WS_URL = "wss://checkmate-backend-5v6nlwmzk-dhruv-patels-projects-7fb495a8.vercel.app";
+const WS_URL = "wss://checkmate-4vmo.onrender.com/";
 console.log("WS_URL", WS_URL);
 
 export const Game = ({
@@ -42,7 +44,9 @@ export const Game = ({
     const [wait, setWait] = useState(0)
     const [color, setColor] = useState<"white" | "black">("white"); 
     const [roomId, setRoomId] = useState<string>("");
-
+    const [gameStatus, setGameStatus] = useState<string>("Waiting for opponent...");
+    const [turnIndicator, setTurnIndicator] = useState<string>("");
+  
     const [lobby, setLobby] = useState(true);
     const [sendingPc, setSendingPc] = useState<null | RTCPeerConnection>(null);
     const [receivingPc, setReceivingPc] = useState<null | RTCPeerConnection>(null);
@@ -335,37 +339,64 @@ export const Game = ({
 
     // if (!socket) return <div>Connecting...</div>
 
-    return <div className="justify-center flex">
-        <div className="pt-8 max-w-screen-lg w-full">
-            <div className="grid grid-cols-6 gap-4 w-full">
-                <div className="col-span-4 w-full flex justify-center">
-                    <ChessBoard roomId={roomId} chess={chess} setBoard={setBoard} socket={socket} board={board} color={color} />
-                </div>
-                <div className="col-span-2 bg-slate-900 w-full flex justify-center">
-                    <div className="pt-8">
-                        {started && color && (
-                            <div className="flex flex-col items-center">
-                                <h3 className="text-white font-bold text-1xl">
-                                    You are playing as 
-                                </h3>
-                                <h1 className="text-white font-bold text-5xl">
-                                    {color}
-                                </h1>
-                            </div>
-                        )}
-
-                        {/* Video preview area */}
-                        <div className="mb-4 w-full max-w-xs px-3">
-                        <div className="p-4">
-                            <video autoPlay width={600} height={600} ref={localVideoRef} />
-                        </div> 
-                       <div className="p-4">
-                            <video autoPlay width={600} height={600} ref={remoteVideoRef} />
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
+    return (
+        <div className="relative min-h-screen w-full overflow-hidden">
+          <ThreeJSBackground />
+          
+          <div className="relative z-10 flex flex-col items-center min-h-screen">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="container mx-auto px-4 py-8"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <motion.div 
+                  className="bg-black/30 backdrop-blur-sm rounded-xl p-4 shadow-xl"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <ChessBoard 
+                    roomId={roomId} 
+                    chess={chess} 
+                    setBoard={setBoard} 
+                    socket={socket} 
+                    board={board} 
+                    color={color} 
+                  />
+                </motion.div>
+                
+                <motion.div 
+                  className="bg-black/30 backdrop-blur-sm rounded-xl p-4 shadow-xl flex flex-col items-center justify-center"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <div className="flex-1 p-4">
+                    <video autoPlay height={300} width={400} className="object-cover" ref={localVideoRef} />
+                  </div> 
+                  <div className="flex-1 p-4">
+                    <video autoPlay height={300} width={400} className="object-cover" ref={remoteVideoRef} />
+                  </div>
+                </motion.div>
+              </div>
+              
+              <motion.div 
+                className="mt-6 w-full"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <GameInfo 
+                  started={started} 
+                  color={color} 
+                  gameStatus={gameStatus}
+                  turnIndicator={turnIndicator}
+                />
+              </motion.div>
+            </motion.div>
+          </div>
+      </div>
+  );
+};
