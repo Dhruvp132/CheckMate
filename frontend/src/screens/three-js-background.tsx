@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
@@ -105,7 +106,7 @@ export const ThreeJSBackground = () => {
       requestAnimationFrame(animate);
       
       // Rotate and move particles
-      particles.children.forEach((particle: THREE.Mesh) => {
+      particles.children.forEach((particle) => {
         // Update position
         particle.position.x += particle.userData.velocity.x;
         particle.position.y += particle.userData.velocity.y;

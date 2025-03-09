@@ -14,7 +14,7 @@ export const ChessBoard = ({ chess, board, socket, setBoard, color, roomId }: {
         type: PieceSymbol;
         color: Color;
     } | null)[][];
-    socket: WebSocket;
+    socket: WebSocket | null;
     color : "white" | "black";  
     roomId : string, 
 }) => {
@@ -25,7 +25,7 @@ export const ChessBoard = ({ chess, board, socket, setBoard, color, roomId }: {
         return piece ? piece.color : null;
     };
 
-    return <div className="text-white-200">
+    return <div className="m-6 text-white-200">
         {board.map((row, i) => {
             return <div key={i} className="flex">
                 {row.map((square, j) => {
@@ -44,7 +44,7 @@ export const ChessBoard = ({ chess, board, socket, setBoard, color, roomId }: {
                             }
                             setFrom(squareRepresentation);
                         } else {
-                            socket.send(JSON.stringify({
+                            socket?.send(JSON.stringify({
                                 type: MOVE,
                                 roomId,
                                 payload: {

@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, Users} from 'lucide-react';
 import { motion } from "framer-motion";
 import ChessScene from "../components/chess-scene";
-import { Button } from "../components/Button";
 import { Card } from "../components/ui/Card";
 import { Game } from "./Game";
+import { Button } from "../components/ui/button";
 
 export const GameLanding = () => {
   const [localAudioTrack, setLocalAudioTrack] = useState<MediaStreamTrack | null>(null);
   const [localVideoTrack, setLocalVideoTrack] = useState<MediaStreamTrack | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [joined, setJoined] = useState(false);
-  const [searchingForOpponent, setSearchingForOpponent] = useState(false);
+  const [searchingForOpponent, ] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const getCam = async () => {

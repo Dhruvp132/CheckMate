@@ -1,15 +1,16 @@
-"use client";
-
 import { motion } from "framer-motion";
+import { Chess } from 'chess.js';
 
 interface GameInfoProps {
   started: boolean;
   color: "white" | "black";
   gameStatus: string;
-  turnIndicator: string;
+  chess: Chess;
 }
 
-export const GameInfo = ({ started, color, gameStatus, turnIndicator }: GameInfoProps) => {
+export const GameInfo = ({ started, color, gameStatus, chess }: GameInfoProps) => {
+  const turnIndicator = gameStatus === "In Game" ? (chess.turn() === "w" ? "white" : "black") : "N/A";
+
   return (
     <motion.div 
       className="bg-black/30 backdrop-blur-sm rounded-xl p-4 shadow-xl"
@@ -22,15 +23,15 @@ export const GameInfo = ({ started, color, gameStatus, turnIndicator }: GameInfo
       <div className="space-y-4">
         {started ? (
           <>
-            {/* <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <span className="text-gray-300">Status:</span>
               <span className="text-white font-medium">{gameStatus}</span>
-            </div> */}
+            </div>
             
             <div className="flex items-center justify-between">
               <span className="text-gray-300">You are playing as:</span>
               <motion.span 
-                className={`font-bold text-lg ${color === "white" ? "text-white" : "text-white-800"}`}
+                className={`font-bold text-lg ${color === "white" ? "text-white" : "text-white"}`}
                 initial={{ scale: 1 }}
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.5, delay: 0.7 }}
@@ -39,10 +40,10 @@ export const GameInfo = ({ started, color, gameStatus, turnIndicator }: GameInfo
               </motion.span>
             </div>
             
-            {/* <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <span className="text-gray-300">Turn:</span>
-              <span className="text-white font-medium">{turnIndicator}</span>
-            </div> */}
+              <span className="text-white font-medium">{turnIndicator}'s Turn</span>
+            </div>
             
           </>
         ) : (

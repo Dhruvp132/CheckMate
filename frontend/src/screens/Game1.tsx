@@ -35,20 +35,20 @@ export const Game1 = (
 
     // const socket = useSocket();
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [chess, setChess] = useState<Chess>(new Chess());
+    const [chess, ] = useState<Chess>(new Chess());
     const [board, setBoard] = useState(chess.board());
     const [started, setStarted] = useState(false)
-    const [wait, setWait] = useState(0)
+    // const [wait, setWait] = useState(0)
     const [color, setColor] = useState<"white" | "black">("white"); 
     const [roomId, setRoomId] = useState<string>("");
 
-    const [lobby, setLobby] = useState(true);
+    const [, setLobby] = useState(true);
     const [sendingPc, setSendingPc] = useState<null | RTCPeerConnection>(null);
     const [receivingPc, setReceivingPc] = useState<null | RTCPeerConnection>(null);
-    const [receivingUser, setReceivingUser] = useState<string | null>(null);
-    const [remoteVideoTrack, setRemoteVideoTrack] = useState<MediaStreamTrack | null>(null);
-    const [remoteAudioTrack, setRemoteAudioTrack] = useState<MediaStreamTrack | null>(null);
-    const [remoteMediaStream, setRemoteMediaStream] = useState<MediaStream | null>(null);
+    // const [receivingUser, setReceivingUser] = useState<string | null>(null);
+    const [, setRemoteVideoTrack] = useState<MediaStreamTrack | null>(null);
+    const [, setRemoteAudioTrack] = useState<MediaStreamTrack | null>(null);
+    const [, setRemoteMediaStream] = useState<MediaStream | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const localVideoRef = useRef<HTMLVideoElement>(null);
     const [cameraInitialized, setCameraInitialized] = useState(false);

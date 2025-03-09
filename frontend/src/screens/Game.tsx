@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 // /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -11,7 +12,6 @@ import { ThreeJSBackground } from "./three-js-background.tsx";
 import { ChessBoard } from "../components/ChessBoard"
 import { Chess } from 'chess.js'
 
-
 declare global {
     interface Window {
         pcr: RTCPeerConnection | null;
@@ -24,9 +24,7 @@ export const MOVE = "move";
 export const GAME_OVER = "game_over";
 export const VIDEO = "video"; 
 
-// const WS_URL = process.env.REACT_APP_BACKEND_URL || "ws://localhost:8080";
 const WS_URL = "wss://checkmate-4vmo.onrender.com/";
-console.log("WS_URL", WS_URL);
 
 export const Game = ({
     localAudioTrack,
@@ -38,25 +36,24 @@ export const Game = ({
 
     // const socket = useSocket();
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [chess, setChess] = useState<Chess>(new Chess());
+    const [chess] = useState<Chess>(new Chess());
     const [board, setBoard] = useState(chess.board());
     const [started, setStarted] = useState(false)
-    const [wait, setWait] = useState(0)
+    // const [wait, setWait] = useState(0)
     const [color, setColor] = useState<"white" | "black">("white"); 
     const [roomId, setRoomId] = useState<string>("");
     const [gameStatus, setGameStatus] = useState<string>("Waiting for opponent...");
-    const [turnIndicator, setTurnIndicator] = useState<string>("");
+    const [, setCurrentTurn] = useState<"white" | "black">("white");
   
-    const [lobby, setLobby] = useState(true);
-    const [sendingPc, setSendingPc] = useState<null | RTCPeerConnection>(null);
-    const [receivingPc, setReceivingPc] = useState<null | RTCPeerConnection>(null);
-    const [receivingUser, setReceivingUser] = useState<string | null>(null);
-    const [remoteVideoTrack, setRemoteVideoTrack] = useState<MediaStreamTrack | null>(null);
-    const [remoteAudioTrack, setRemoteAudioTrack] = useState<MediaStreamTrack | null>(null);
-    const [remoteMediaStream, setRemoteMediaStream] = useState<MediaStream | null>(null);
+    const [, setLobby] = useState(true);
+    const [, setSendingPc] = useState<null | RTCPeerConnection>(null);
+    const [, setReceivingPc] = useState<null | RTCPeerConnection>(null);
+    const [, setRemoteVideoTrack] = useState<MediaStreamTrack | null>(null);
+    const [, setRemoteAudioTrack] = useState<MediaStreamTrack | null>(null);
+    const [, setRemoteMediaStream] = useState<MediaStream | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const localVideoRef = useRef<HTMLVideoElement>(null);
-    const [error, setError] = useState<Error | null>(null);
+    const [, setError] = useState<Error | null>(null);
 
 
     useEffect(() => {
@@ -80,15 +77,18 @@ export const Game = ({
             setBoard(chess.board());
             setStarted(true);
             setColor(payload.color);
+            setCurrentTurn("white");
         };
     
         const handleMove = (payload: any) => {
             chess.move(payload);
             setBoard(chess.board());
+            setCurrentTurn(chess.turn() === "w" ? "white" : "black");
             console.log("Move made");
         };
     
         const handleGameOver = () => {
+            setGameStatus("Game Over");
             console.log("Game over");
         };
 
@@ -145,7 +145,7 @@ export const Game = ({
             };
         };
 
-        const handleOffer = async (message: any) => {
+        const handleOffer = async (message: { payload: { sdp: RTCSessionDescriptionInit }, roomId: string }) => {
             console.log("Handling offer from handler offer");
             console.log(message); 
             setLobby(false);
@@ -270,6 +270,7 @@ export const Game = ({
 
         const handleLobby = () => {
             setLobby(true);
+            setGameStatus("In Game")
         };
 
     // Main message handler that delegates to specific handlers
@@ -352,7 +353,7 @@ export const Game = ({
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <motion.div 
-                  className="bg-black/30 backdrop-blur-sm rounded-xl p-4 shadow-xl"
+                  className="bg-black/30 backdrop-blur-sm rounded-xl p-4 shadow-xl flex flex-col justify-center items-center"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
@@ -366,7 +367,6 @@ export const Game = ({
                     color={color} 
                   />
                 </motion.div>
-                
                 <motion.div 
                   className="bg-black/30 backdrop-blur-sm rounded-xl p-4 shadow-xl flex flex-col items-center justify-center"
                   initial={{ opacity: 0, x: 20 }}
@@ -392,7 +392,7 @@ export const Game = ({
                   started={started} 
                   color={color} 
                   gameStatus={gameStatus}
-                  turnIndicator={turnIndicator}
+                  chess={chess}
                 />
               </motion.div>
             </motion.div>
