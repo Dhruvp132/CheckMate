@@ -154,6 +154,7 @@ export default function Landing() {
             <Button
               size="lg"
               className="rounded-full bg-white px-8 py-6 text-lg font-semibold text-gray-900 hover:bg-gray-200"
+              onClick={() => navigate("/game")}
             >
               Start Playing Now
             </Button>
