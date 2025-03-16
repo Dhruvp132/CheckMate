@@ -18,6 +18,13 @@ declare global {
     }
 }
 
+const configuration = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+};
+
 // TODO: Move together, there's code repetition here
 export const INIT_GAME = "init_game";
 export const MOVE = "move";
@@ -102,7 +109,7 @@ export const Game = ({
             const currentRoomId = message.roomId;
             setRoomId(currentRoomId);
             
-            const pc = new RTCPeerConnection();
+            const pc = new RTCPeerConnection(configuration);
             
             setSendingPc(pc);
             if (localVideoTrack) {
@@ -150,7 +157,7 @@ export const Game = ({
             console.log(message); 
             setLobby(false);
 
-            const pc = new RTCPeerConnection();
+            const pc = new RTCPeerConnection(configuration);
             await pc.setRemoteDescription(message.payload.sdp);
             const sdp = await pc.createAnswer();
             await pc.setLocalDescription(sdp);
