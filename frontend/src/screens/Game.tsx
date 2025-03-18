@@ -31,7 +31,9 @@ export const MOVE = "move";
 export const GAME_OVER = "game_over";
 export const VIDEO = "video"; 
 
-const WS_URL = "wss://checkmate-4vmo.onrender.com/";
+//IMPORTANT in vite you need to add VITE prefix to the env variables
+const WS_URL = import.meta.env.VITE_BACKEND_URL || "empty";
+console.log(WS_URL);
 
 export const Game = ({
     localAudioTrack,
@@ -73,6 +75,13 @@ export const Game = ({
                 type: INIT_GAME,
             }));
         }
+
+        //TODO: COMPLETE THIS 
+        // socket.onclose = () => {
+        //     console.log("socket closed");
+        //     setGameStatus("Game Over: Other player disconnected");
+        //     alert("Game Over: Other player disconnected");
+        // }
 
         socket.onerror = (error) => {
             console.error("Socket error:", error);
@@ -372,6 +381,7 @@ export const Game = ({
                     socket={socket} 
                     board={board} 
                     color={color} 
+                    started={started}
                   />
                 </motion.div>
                 <motion.div 

@@ -53,11 +53,15 @@ export default {
           DEFAULT: "hsl(222.2, 84%, 4.9%)",
           foreground: "hsl(210, 40%, 98%)",
         },
+        'light-brown': '#e0c4a8',
+        'dark-brown': '#6e4c41',
+        'cyan-500': '#06b6d4', 
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        full: "9999px",
       },
       keyframes: {
         "accordion-down": {
